@@ -1,0 +1,24 @@
+{
+    "homepage":{
+        "species":{
+            "count":19,
+            "text":"different species",
+            "heading":"Species"
+        },
+        "peptide_lengths":{
+            "count":10,
+            "text":"different lengths",
+            "heading":"Peptide lengths"
+        },
+        "complex_types":{
+            "count":4,
+            "text":"combinations",
+            "heading":"Complex types"
+        },
+        "deposition_years":{
+            "count":32,
+            "text":"different years",
+            "heading":"Deposition years"
+        }
+    }
+}

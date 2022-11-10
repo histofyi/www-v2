@@ -102,8 +102,8 @@ def structure_view_handler(pdb_code):
     if pdb_code is not None:
         pdb_code = pdb_code.lower()  
         if pdb_code in app.data['pdb_codes']:
-            # fetch the data on the structure
-            return {'pdb_code':pdb_code}
+            core = app.data['core'][pdb_code]
+            return core
         else:
             matches = lookup_pdb_code(pdb_code, app.data['pdb_codes'])
             return {

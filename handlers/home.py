@@ -1,7 +1,6 @@
 from models.sets import StructureSet
 from flask import current_app
 
-from functions.sitespecific import get_collection_colours
 
 def home_handler():
     """

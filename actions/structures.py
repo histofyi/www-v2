@@ -15,7 +15,7 @@ class StructureLookup():
 
     def get(self) -> Dict:
         if not self.pdb_code:
-            return {'matches':StructureSetMembers.hydrate(self.get_random(self.pdb_codes, 10))}
+            return {'pdb_code':None, 'matches':StructureSetMembers.hydrate(self.get_random(self.pdb_codes, 10))}
         else:
             if self.pdb_code in self.pdb_codes:
                 return {'exact_match':self.pdb_code}
@@ -50,6 +50,6 @@ class StructureLookup():
             matches = self.get_random(matches, 10)
         if len(matches) == 0 and len(best_matches) == 0:
             matches = self.get_random(self.pdb_codes, 10)
-        return {'best_matches':StructureSetMembers.hydrate(best_matches), 'matches':StructureSetMembers.hydrate(matches)}
+        return {'pdb_code':self.pdb_code, 'best_matches':StructureSetMembers.hydrate(best_matches), 'matches':StructureSetMembers.hydrate(matches)}
 
 

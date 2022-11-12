@@ -7,6 +7,7 @@ import datetime
 from flask import Flask
 
 from functions.files import load_json
+from functions.decorators import templated
 
 import handlers
 
@@ -47,7 +48,7 @@ def load_data():
 
     By loading them in here, we can reduce S3 calls and speed the app up significantly.
     """
-    datasets = ['pdb_codes','collections','index','ordering','sets','core','listings']
+    datasets = ['pdb_codes','collections','index','ordering','sets','core','listings','chains','collection_colours']
     app.data = {}
     for dataset in datasets:
         app.data[dataset] = load_json(dataset)
@@ -55,12 +56,14 @@ def load_data():
 
 
 @app.route('/')
+@templated('index')
 def home_handler():
     return handlers.home_handler()
 
 
 @app.route('/structures/lookup/')
 @app.route('/structures/lookup')
+@templated('lookup')
 def structure_lookup_handler():
     return handlers.structure_lookup_handler()
 

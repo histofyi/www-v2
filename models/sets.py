@@ -33,16 +33,16 @@ class StructureSet():
 
     def paginate(self, page, page_size):
         all = self.get()['members']
-        last_page = math.ceil(len(all) / page_size) + 1
+        last_page = math.ceil(len(all) / page_size)
         first_record = (page -1)*page_size
         last_record = (page * page_size)
         members = all[first_record:last_record]
-        print (len(members))
-        print (last_page)
         pagination = {
             'current_page':page,
+            'page_count':last_page,
             'page_size':page_size,
-            'pages': [page_number for page_number in range(1,last_page)]
+            'pages': [page_number for page_number in range(1,last_page + 1)],
+            'total':len(all)
         }
         return pagination, members
 

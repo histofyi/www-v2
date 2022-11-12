@@ -46,11 +46,11 @@ def structure_browse_handler(context, set_slug):
     This function is the structure browse handler
 
     """
-    variables = request_variables(None, params=['page'])
-    if not variables['page']:
+    variables = request_variables(None, params=['page_number'])
+    if not variables['page_number']:
         page = 1
     else:
-        page = variables['page']
+        page = int(variables['page_number'])
     page_size = 25
     this_set = StructureSet(context, set_slug).hydrate(page=page, page_size=page_size)
-    return this_set
+    return {'set':this_set}

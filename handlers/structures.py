@@ -3,6 +3,7 @@ from models.structures import StructureRecord
 from actions.structures import StructureLookup
 from functions.forms import request_variables
 
+
 def structure_view_handler(pdb_code):
     """
     This function is the structure view handler
@@ -11,13 +12,13 @@ def structure_view_handler(pdb_code):
     try:
         structure_record = StructureRecord(pdb_code).get()
         return  {
-            'structure_record':structure_record
+            'structure':structure_record
          }
     except Exception as error:
         return {
             'error':str(error),
             'error_code':404,
-            'structure_record':None,
+            'structure':None,
             'suggestions':StructureLookup(pdb_code=pdb_code).get()
         }
 

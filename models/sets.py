@@ -1,5 +1,7 @@
 from typing import List, Dict, Tuple, Union
 from flask import current_app
+import math
+
 
 class StructureSetMembers():
 
@@ -29,8 +31,20 @@ class StructureSet():
             raise Exception('Context not found error. No context named "{context}" could be found'.format(context=context))
 
 
-    def paginate(self, page=None, page_size=None):
-        pass
+    def paginate(self, page, page_size):
+        all = self.get()['members']
+        last_page = math.ceil(len(all) / page_size) + 1
+        first_record = (page -1)*page_size
+        last_record = (page * page_size)
+        members = all[first_record:last_record]
+        print (len(members))
+        print (last_page)
+        pagination = {
+            'current_page':page,
+            'page_size':page_size,
+            'pages': [page_number for page_number in range(1,last_page)]
+        }
+        return pagination, members
 
 
     def get(self, page=None, page_size=None):
@@ -40,12 +54,18 @@ class StructureSet():
             return self.paginate(page, page_size)
 
     
-    def hydrate(self, page=1, page_size=25, depth='listings'):
-        self.get()
+    def hydrate(self, page=None, page_size=None, depth='listings'):
+
         hydrated_set = {}
         for key in self.set:
             hydrated_set[key] = self.set[key]
-        hydrated_set['members'] = StructureSetMembers.hydrate(self.set['members'])
+        if page and page_size:
+            pagination, members = self.paginate(page, page_size)
+            hydrated_set['pagination'] = pagination
+        else:
+            self.get()
+            members = self.set['members']
+        hydrated_set['members'] = StructureSetMembers.hydrate(members)
         return hydrated_set
 
 

@@ -3,22 +3,26 @@
         "species":{
             "count":19,
             "text":"different species",
-            "heading":"Species"
+            "heading":"Species",
+            "color_name":"indy"
         },
         "peptide_lengths":{
             "count":10,
             "text":"different lengths",
-            "heading":"Peptide lengths"
+            "heading":"Peptide lengths",
+            "color_name":"purple"
         },
         "complex_types":{
             "count":4,
             "text":"combinations",
-            "heading":"Complex types"
+            "heading":"Complex types",
+            "color_name":"teal"
         },
         "deposition_years":{
             "count":32,
             "text":"different years",
-            "heading":"Deposition years"
+            "heading":"Deposition years",
+            "color_name":"indigo    "
         }
     }
 }

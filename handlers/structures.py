@@ -12,7 +12,8 @@ def structure_view_handler(pdb_code):
     try:
         structure_record = StructureRecord(pdb_code).get()
         return  {
-            'structure':structure_record
+            'structure':structure_record,
+            'display':True
          }
     except Exception as error:
         return {

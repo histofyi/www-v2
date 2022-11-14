@@ -28,7 +28,7 @@ def templated(template:str):
             ctx['site_title'] = current_app.config['SITE_TITLE']
             ctx['static_route'] = current_app.config['STATIC_ROUTE']
             ctx['collection_colours'] = current_app.data['collection_colours']
-            ctx['chains'] = current_app.data['chains']
+            ctx['chain_types'] = current_app.data['chains']
             if '/' in template_name:
                 section = template_name.split('/')[0]
                 ctx['nav'] = section

@@ -1,0 +1,54 @@
+<section>
+    <div class="grid-container">
+        <div class="column-full-width">
+            <div class="inner">
+                <hr />
+                <h2 class="heading-medium vertical-spacing-top-0-5"><a name="chain_sequences" class="anchor"></a>Chain sequences</h2>    
+            </div>
+        </div>
+        <div class="column-full-width">
+            <table width="100%">
+            {% for chain in structure.assigned_chains %}
+            {% set thischain = structure.assigned_chains[chain]%}
+            <tr>
+                <td class="chain_block {{chain}}">
+                    <div><strong>{{loop.index}}. {{chain_types[chain]['ui_text']}}</strong></div>
+                    {% if chain == 'peptide' %}
+                        {% if thischain.source_protein %}
+                            <div>{{thischain.source_protein.protein_name.value}} ({{thischain.source_protein.start_index}}-{{thischain.source_protein.end_index}})</div>
+                        {% endif %}
+                    {% else %}
+                        {% if chain == 'class_i_alpha' %}
+                            {% if structure.allele %}
+                                <div>{{structure.allele.alpha.name}}</div>
+                            {% endif %}
+                        {% else %}
+                            <div>{{chain_types[chain]['ui_text']}}</div>
+                        {% endif %}
+                    {% endif %}
+                    {% if thischain.source_protein %}
+                        <div><strong>Origin</strong><br />{{thischain.source_protein.source_organism.scientific_name}}</div>
+                        {% if structure.allele.alpha and chain == 'class_i_alpha'%}
+                        <div>{{structure.allele.alpha.id|imgt_ipd_hla_parser|safe}}</div>
+                        {% endif %}
+                        {% if thischain.source_protein %}
+                            <div><strong>Uniprot</strong><br/>[<a href="https://www.uniprot.org/uniprot/{{thischain.source_protein.uniprot_id}}" target="_blank">{{thischain.source_protein.uniprot_id}}</a>]</div>
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="sequence_block sequence">{{thischain.sequence | chunked_sequence|safe}}</div>
+                    <br >
+                </td>
+            </tr>
+            <tr><td></td><td></td></tr>
+            {% endfor %}
+            </table>
+            <br />
+            <h3 class="heading-smaller">Data provenance</h3>
+            <p><small><strong>Sequences</strong> are retrieved via the Uniprot method of the RSCB REST API. Sequences are then compared to those derived from the PDB file and matched against sequences retrieved from the IPD-IMGT/HLA database for human sequences, or the IPD-MHC database for other species. Mouse sequences are matched against FASTA files from Uniprot. Sequences for the mature extracellular protein (signal petide and cytoplasmic tail removed) are compared to identical length sequences from the datasources mentioned before using either exact matching or Levenshtein distance based matching.</small></p>
+
+        </div>
+    </div>
+  </div>
+</section>

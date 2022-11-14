@@ -1,0 +1,43 @@
+<h3 class="vertical-spacing-top-0-5 heading-small">Complex type</h3>
+{% if structure.complex_type %}
+    <p>{{structure.complex_type}}</p>
+{% else %}
+    <p>Problems in automatic complex type assignment. Known issue being fixed.</p>
+{% endif %}
+{% for chain in structure.assigned_chains %}
+{% set thischain = structure.assigned_chains[chain] %}
+    <div class="vertical-spacing-bottom-0-25">
+        <div class="chain_block {{chain}}">
+            <div>
+                <strong>{{loop.index}}.</strong> {{chain_types[chain]['ui_text']}}
+                {% if chain == 'class_i_alpha' %}
+                <br />
+                    {% if structure.allele %}
+                    <a href="/structures/sets/browse/allele/{{structure.allele.alpha.slug}}">{{structure.allele.alpha.name}}</a>
+                    {% endif %}
+                {% elif chain == 'peptide' %}
+                <br />
+                <a href="/structures/sets/browse/peptide_sequence/{{structure.peptide_sequence|lower}}">{{structure.peptide.sequence}}</a>
+                {% else %}
+                    {% if tcr_data %}
+                        {% for chain in ['alpha','beta'] %}
+                            {% if tcr_data[chain]['chains'][0] in thischain.chains %}
+                                <div>{{tcr_data[chain]['subgroup']}}</div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endif%}
+            </div>
+            <div>
+                {{thischain.chains}}
+            </div>
+            
+
+        </div>
+    </div>
+{% endfor %}
+{% if tcr_data %}
+            <div>
+                <a href="http://opig.stats.ox.ac.uk/webapps/stcrdab/StrViewer?pdb=1ao7" target="_new">Information on this structure</a> on STCRdab.
+            </div>
+            {% endif %}

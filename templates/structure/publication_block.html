@@ -1,0 +1,27 @@
+
+{% set publication = structure.publication %}
+<div class="column-two-thirds">
+    <h3 class="heading-small">
+        {{publication.bibjson.title | safe}}
+    </h3>
+    <div>
+        {% for author in publication.bibjson.author %}
+            {{author.name | safe }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    </div>
+    <div>
+        {% if publication.bibjson.journal.iso_abbreviation %}<i>{{publication.bibjson.journal.iso_abbreviation}}</i>{% endif %} {% if publication.bibjson.year %}({{publication.bibjson.year[0]}}),{% endif %}  {% if publication.bibjson.volume %}<strong>{{publication.bibjson.volume[0]}}</strong>,{% endif %} 
+        {% if publication.bibjson.pages != '-' %}{{publication.bibjson.pages[0]}}{% endif %} {% if structure.doi %}[<a href="{{structure.resolved_doi_url}}" target="_blank">doi://{{structure.doi }}</a>]{% endif %} {# [View on PubMed] #}
+    </div>
+    <br />
+    <p>
+        {{ publication.abstract | safe}}
+    </p>
+    <h3  class="heading-small">Structure deposition and release</h3>
+    <div>Deposited: {{structure.chronology.deposition_date}}</div>
+    <div>Released: {{structure.chronology.release_date}}</div>
+    <div>Revised: {{structure.chronology.revision_date}}</div>
+
+    <h3 class="heading-smaller vertical-spacing-top-0-5">Data provenance</h3> 
+    <p><small><strong>Publication data</strong> retrieved {# on [{{structure.last_updated}}] #} from PDBe REST API<a class="superscript" href="#8">8</a> and PMCe REST API<a class="superscript" href="#9">9</a></small></p>
+</div>

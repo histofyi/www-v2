@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+
+
+{% block title %}{{ structure.page_title |safe}}{% endblock %}
+{% set nav = 'structures' %}
+
+{% block main %}
+<style>
+    .sequence {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 12pt;
+    }
+
+    td {
+        vertical-align: top;
+    }
+
+    span.residue {
+        padding: 4px;
+        border: 1px solid #cccccc;
+    }
+
+    div.residue_container {
+        padding: 7px;
+    }
+
+    strong.peptide_position {
+        padding: 10px
+    }
+
+    span.peptide_position_display {
+        border-top: 6px solid #888888;  
+        padding-top: 9px;   
+        padding-right: 5px
+    }
+
+    span.anchor {
+        border-top: 10px solid #888888;
+        padding-top: 5px !important;
+    }
+
+    .border-trp, .border-tyr, .border-phe, .border-his {
+        border-top-color: rgba(229, 222, 80, 0.9) !important;        
+    }
+
+    .border-ile, .border-leu, .border-val, .border-ala, .border-met, .border-cys {
+        border-top-color: rgba(229, 222, 80, 0.7) !important;        
+    }
+
+    .border-asp, .border-glu {
+        border-top-color: rgba(194, 78, 91, 0.7) !important;  
+    }
+
+    .border-lys, .border-arg {
+        border-top-color: rgba(66, 110, 172, 0.7) !important;  
+    }
+
+
+    .border-asn, .border-gln, .border-thr, .border-ser, .border-gly, .border-pro {
+        border-top-color: rgba(200, 200, 200, 0.8) !important;  
+    }
+
+    span.key {
+        padding:4px;
+        border: 1px solid #cccccc;
+    }
+
+
+    span.ile, span.leu, span.val, span.ala, span.met, span.cys, span.hydrophobic {
+        background-color: rgba(229, 222, 80, 0.3);
+    }
+    span.trp, span.tyr, span.phe, span.his, span.aromatic {
+        background-color: rgba(229, 222, 80, 0.5);
+    }
+    span.glu, span.asp, span.acidic {
+        background-color: rgba(194, 78, 91, 0.4);
+    }
+    span.lys, span.arg, span.basic {
+        background-color: rgba(66, 110, 172, 0.4);
+    }
+    span.asn, span.gln, span.thr, span.ser, span.gly, span.his, span.pro, span.neutral {
+        background-color: rgba(200, 200, 200, 0.4);
+    }
+
+    a.anchor {
+        display: block;
+        position: relative;
+        top: -85px;
+        visibility: hidden;
+    }
+
+    span.pocket-heading {
+        border-top: 6px solid #888888;  
+        padding-top: 9px;   
+        padding-right: 5px
+    }
+
+
+    span.binds_c_terminus {
+        border-color: #DF6151 !important;
+        background-color: rgba(223, 97, 81, 0.2);
+        border-width: 1px
+    }
+
+    span.binds_pc_1_backbone {
+        border-color: #926066 !important;
+        background-color: rgba(146, 96, 102, 0.2);
+    }
+
+
+    span.binds_p1_backbone {
+        border-color: #626780 !important;
+        background-color: rgba(98, 103, 128, 0.2);
+    }
+
+    span.binds_p2_backbone {
+        border-color: #7A6473 !important;
+        background-color: rgba(122, 100, 115, 0.2);
+    }
+
+    span.binds_n_terminus {
+        border-color: #4A6F96 !important;
+        background-color: rgba(74, 111, 150, 0.2);
+    }
+
+    span.a-pocket {
+        border-top-color: rgba(255, 223, 184, 1) !important;    
+    }
+
+    span.b-pocket {
+        border-top-color: rgba(252, 202, 226, 1) !important;    
+    }
+
+    span.c-pocket {
+        border-top-color: rgba(174, 211, 211, 1) !important;    
+    }
+
+    span.d-pocket {
+        border-top-color: rgba(174, 230, 174, 1) !important;    
+    }
+
+    span.e-pocket {
+        border-top-color: rgba(149, 149, 192, 1) !important;    
+    }
+
+    span.f-pocket {
+        border-top-color: rgba(228, 187, 123, 1) !important;    
+    }
+
+    a.no-decoration {
+        text-decoration: none;
+    }
+
+    div.chain_block, td.chain_block {
+        border-left: 7px solid #888888;
+        padding-left: 10px;
+    }
+
+    td.chain_block {
+        width:25%;
+    }
+
+    div.sequence_block {
+        padding-left:50px;
+    }
+
+    div.peptide, td.peptide {
+        border-left-color: #F5E54B;
+    }
+
+    div.class_i_alpha, td.class_i_alpha {
+        border-left-color: #61927E;
+    }
+
+    div.beta2m, td.beta2m {
+        border-left-color: #E1935B;
+    }
+
+    div.tcr_alpha {
+        border-left-color: #96C45E;
+    }
+    div.tcr_gamma {
+        border-left-color: #96C45E;
+    }
+    div.tcr_beta {
+        border-left-color: #DA4EA9;
+    }
+    div.tcr_delta {
+        border-left-color: #DA4EA9;
+    }
+    a.superscript {
+            position: relative; 
+            top: -0.5em; 
+            font-size: 80%; 
+    }
+
+    .heading-smaller {
+        font-feature-settings: "salt" on;
+        font-size: 18px;
+        line-height: 26px;
+        font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        max-width: 800px; }
+        @media screen and (min-width: 600px) {
+            .heading-smaller {
+            font-size: 19px;
+            line-height: 22px; } }
+    
+</style>
+<script>
+    function copyUrl(elementId) {
+        /* Get the the href */
+        var url = document.getElementById(elementId).href;
+
+        /* Copy the text inside the text field */
+        navigator.clipboard.writeText(url);
+    }
+</script>
+
+{% if display %}
+
+<section>
+    <div class="grid-container">
+        <div class="column-full-width">
+            <div class="inner">
+                <small><strong>{{structure.pdb_code|upper}}</strong></small>
+                <h1 class="heading-large vertical-spacing-bottom structure-title">{{structure.title|safe}}</h1>
+            </div>
+        </div>
+        <div class="column-two-thirds">
+            <div class="inner">
+                {% include "structure/structure_display.html" %}
+            </div>
+        </div>
+        <div class="column-one-third">
+            <div class="inner">
+                {% include "structure/internal_nav.html" %}
+                <hr />
+                {% include "structure/complex_type.html" %}
+                <hr />
+                {% include "structure/organism_and_allele.html" %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% include "structure/publication.html" %}
+
+{% include "structure/peptide.html" %}
+
+{% if structure.peptide %}
+
+{% include "structure/peptide_neighbours.html" %}
+
+{% endif %}
+{#
+{% include "structure/binding_cleft_properties.html" %}
+#}
+
+{% include "structure/binding_cleft_pockets.html" %}
+
+{% include "structure/chains.html" %}
+
+{# 
+{% if structure.crystallography %}
+{% endif %}
+#}
+
+{% include "structure/downloadable_data.html" %}
+
+
+{% include "structure/data_license.html" %}
+
+{% include "structure/footnotes.html" %}
+    
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/3Dmol/1.4.0/3Dmol-min.js"></script>
+
+
+{% else %}
+
+
+<section class="">
+    <div class="grid-container">
+        <div class="column-full-width">
+            <div class="inner">
+                <small><strong>{{structure.pdb_code|upper}}</strong></small>
+                <h1 class="heading-large vertical-spacing-bottom structure-title">Coming soon...</h1>
+                <p>
+                    {{message|safe}}
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

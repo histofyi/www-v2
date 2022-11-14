@@ -1,0 +1,56 @@
+    <style>
+        td {
+            height: 25px;
+            vertical-align: middle;
+        }
+        .button-input {
+            min-height:25px;
+        }
+        .text-input {
+            height:25px;
+        }
+        .inline-label {
+            height:25px;
+            margin-top:10px;
+            margin-right:5px;
+        }
+
+    </style>
+    
+        <table>
+            <tr>
+                <td>
+                    <form method="GET" action="/structures/lookup" >
+                    <label for="pdb_code" class="inline-label">PDB code</label>
+                </td>
+                <td>{% if variables %}
+                        <input type="text" class="text-input" name="pdb_code" value="{{variables.pdb_code}}"/>
+                    {% else %}
+                        <input type="text" class="text-input" name="pdb_code"/>
+                    {% endif %}
+                </td>
+                <td>
+                    <input type="submit" class="button-input" value="Look up" />
+                </form>
+                </td>
+                <td>&nbsp;&nbsp;</td>
+                <td>
+                    <form method="GET" action="/search" >
+                    <label for="query" class="inline-label">Search for</label>
+                </td>
+                <td>{% if variables %}
+                        <input type="text" class="text-input" name="query" value="{{variables.query}}"/>
+                    {% else %}
+                        <input type="text" class="text-input" name="query"/>
+                    {% endif %}
+                </td>
+                <td>
+                    <input type="submit" class="button-input" value="Search" /> <!--or use <a href="/search">advanced search</a>-->
+                </form>
+                </td>
+            </tr>
+        </table>
+    </form>
+    
+<br />
+<br />

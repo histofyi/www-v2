@@ -1,5 +1,6 @@
 from models.sets import StructureSet
 from models.structures import StructureRecord
+from models.collections import StructureCollection
 from actions.structures import StructureLookup
 from functions.forms import request_variables
 
@@ -57,3 +58,12 @@ def structure_browse_handler(context, set_slug):
     page_size = 25
     this_set = StructureSet(context, set_slug).hydrate(page=page, page_size=page_size)
     return {'set':this_set}
+
+
+def structure_collection_handler(collection_slug):
+    """
+    This function is the structure collection handler
+
+    """
+    collection = StructureCollection(collection_slug).get()
+    return {'collection':collection}

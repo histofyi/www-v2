@@ -5,7 +5,7 @@ import toml
 import datetime
 import itertools
 
-from flask import Flask
+from flask import Flask, Response, redirect
 
 
 from functions.files import load_json
@@ -163,14 +163,55 @@ def structure_view_handler(pdb_code):
 
 
 @app.route('/structures/browse/<string:context>/<string:set_slug>/')
-@app.route('/structures/browse/<string:context><string:set_slug>')
+@app.route('/structures/browse/<string:context>/<string:set_slug>')
 @templated('shared/browse')
 def structure_browse_handler(context, set_slug):
+    print (context)
+    print (set_slug)
     return handlers.structure_browse_handler(context, set_slug)
+
+
+@app.route('/structures/collections/<string:collection_slug>/')
+@app.route('/structures/collections/<string:collection_slug>')
+@templated('collection')
+def structure_collection_handler(collection_slug):
+    return handlers.structure_collection_handler(collection_slug)
+
 
 
 @app.get('/search')
 @templated('search_page')
 def search():
     return handlers.search_handler()
+
+
+
+
+
+
+
+
+
+
+@app.route('/robots.txt')
+def robots_txt():
+    raw_response = '''
+    User-agent: *
+    Allow: /
+    '''
+    response_text = '\n'.join([line.strip() for line in raw_response.splitlines() if len(line) > 0])
+    r = Response(response=response_text, status=200, mimetype="text/plain")
+    r.headers["Content-Type"] = "text/plain; charset=utf-8"
+    return r
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return redirect('/static/histo-32-color.png')
+
+
+@app.route('/<path:path>')
+@templated('404')
+def error_404(path):
+    return handlers.handle_404(path)
     

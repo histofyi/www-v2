@@ -20,6 +20,7 @@ def structure_view_handler(pdb_code):
             'error':str(error),
             'error_code':404,
             'structure':None,
+            'pdb_code':pdb_code,
             'suggestions':StructureLookup(pdb_code=pdb_code).get()
         }
 

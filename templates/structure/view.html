@@ -283,11 +283,12 @@
     <div class="grid-container">
         <div class="column-full-width">
             <div class="inner">
-                <small><strong>{{structure.pdb_code|upper}}</strong></small>
-                <h1 class="heading-large vertical-spacing-bottom structure-title">Coming soon...</h1>
+                <h1 class="heading-large vertical-spacing-bottom structure-title">We don't have a structure for "{{pdb_code|upper}}"</h1>
                 <p>
-                    {{message|safe}}
-                </p>
+                    <h2 class="vertical-spacing-bottom heading-small">Did you mean one of these?</h2>
+                    {% set structures = suggestions.best_matches %}
+                    {% include "shared/partials/sets/info.html" %}
+                  </p>
             </div>
         </div>
     </div>

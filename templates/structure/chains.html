@@ -12,7 +12,7 @@
             {% set thischain = structure.assigned_chains[chain]%}
             <tr>
                 <td class="chain_block {{chain}}">
-                    <div><strong>{{loop.index}}. {{chain_types[chain]['ui_text']}}</strong></div>
+                    <div><strong>{{loop.index}}. {%if chain in chain_types%}{{chain_types[chain]['ui_text']}}{% else %}{{chain}}{% endif %}</strong></div>
                     {% if chain == 'peptide' %}
                         {% if thischain.source_protein %}
                             <div>{{thischain.source_protein.protein_name.value}} ({{thischain.source_protein.start_index}}-{{thischain.source_protein.end_index}})</div>
@@ -23,14 +23,18 @@
                                 <div>{{structure.allele.alpha.name}}</div>
                             {% endif %}
                         {% else %}
-                            <div>{{chain_types[chain]['ui_text']}}</div>
+                            <div>{%if chain in chain_types%}{{chain_types[chain]['ui_text']}}{% else %}{{chain}}{% endif %}</div>
                         {% endif %}
+                    {% endif %}
+                    {% if chain == 'class_i_alpha'%}
+                        <div>{{structure.allele.alpha.identifier|imgt_ipd_hla_parser|safe}}</div>
+                    {% endif %}
+                    {% if structure.tcr and chain in ['tcr_alpha','tcr_beta','tcr_delta','tcr_gamma'] %}
+                        {{structure.tcr}}
                     {% endif %}
                     {% if thischain.source_protein %}
                         <div><strong>Origin</strong><br />{{thischain.source_protein.source_organism.scientific_name}}</div>
-                        {% if structure.allele.alpha and chain == 'class_i_alpha'%}
-                        <div>{{structure.allele.alpha.id|imgt_ipd_hla_parser|safe}}</div>
-                        {% endif %}
+                        
                         {% if thischain.source_protein %}
                             <div><strong>Uniprot</strong><br/>[<a href="https://www.uniprot.org/uniprot/{{thischain.source_protein.uniprot_id}}" target="_blank">{{thischain.source_protein.uniprot_id}}</a>]</div>
                         {% endif %}

@@ -9,7 +9,7 @@
     <div class="vertical-spacing-bottom-0-25">
         <div class="chain_block {{chain}}">
             <div>
-                <strong>{{loop.index}}.</strong> {{chain_types[chain]['ui_text']}}
+                <strong>{{loop.index}}.</strong> {%if chain in chain_types%}{{chain_types[chain]['ui_text']}}{% else %}{{chain}}{% endif %}
                 {% if chain == 'class_i_alpha' %}
                 <br />
                     {% if structure.allele %}
@@ -17,7 +17,7 @@
                     {% endif %}
                 {% elif chain == 'peptide' %}
                 <br />
-                <a href="/structures/sets/browse/peptide_sequence/{{structure.peptide_sequence|lower}}">{{structure.peptide.sequence}}</a>
+                <a href="/structures/sets/browse/peptide_sequence/{{structure.peptide_sequence|lower}}">{{structure.peptide_sequence}}</a>
                 {% else %}
                     {% if tcr_data %}
                         {% for chain in ['alpha','beta'] %}

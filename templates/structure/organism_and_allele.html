@@ -3,12 +3,17 @@
 <hr />
 <h3 class="vertical-spacing-top-0-5 heading-small">Locus / Allele group</h3>
 <div class="vertical-spacing-bottom-0-5">
+    {% if structure.classical %}
+    {% set allele_group = structure.allele.alpha.name.split('.')[0]%}
     {% if structure.locus %}
         {{structure.locus}}
     {% else %}
         Locus and allele not yet assigned
     {% endif %}
-    {% if structure.allele_group %}
-    / <a href="/structures/sets/browse/allele_group/{{structure.allele_group.mhc_alpha|slugify_this}}">{{structure.allele_group.mhc_alpha}}</a>
+    {% if allele_group %}
+    / <a href="/structures/sets/browse/allele_group/{{allele_group|slugify_this}}">{{allele_group}}</a>
+    {% endif %}
+    {% else %}
+        Non-classical MHC Class I molecule
     {% endif %}
 </div>

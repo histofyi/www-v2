@@ -10,12 +10,16 @@
         {% endfor %}
     </div>
     <div>
-        {% if publication.bibjson.journal.iso_abbreviation %}<i>{{publication.bibjson.journal.iso_abbreviation}}</i>{% endif %} {% if publication.bibjson.year %}({{publication.bibjson.year[0]}}),{% endif %}  {% if publication.bibjson.volume %}<strong>{{publication.bibjson.volume[0]}}</strong>,{% endif %} 
-        {% if publication.bibjson.pages != '-' %}{{publication.bibjson.pages[0]}}{% endif %} {% if structure.doi %}[<a href="{{structure.resolved_doi_url}}" target="_blank">doi://{{structure.doi }}</a>]{% endif %} {# [View on PubMed] #}
+        {% if publication.bibjson.journal %}
+            {% if publication.bibjson.journal.iso_abbreviation %}<i>{{publication.bibjson.journal.iso_abbreviation}}</i>{% endif %} {% if publication.bibjson.year %}({{publication.bibjson.year[0]}}),{% endif %}  {% if publication.bibjson.volume %}<strong>{{publication.bibjson.volume[0]}}</strong>,{% endif %} 
+            {% if publication.bibjson.pages != '-' %}{{publication.bibjson.pages[0]}}{% endif %} {% if structure.doi %}[<a href="{{structure.resolved_doi_url}}" target="_blank">doi://{{structure.doi }}</a>]{% endif %} {# [View on PubMed] #}
+        {% endif %}
     </div>
     <br />
     <p>
-        {{ publication.abstract | safe}}
+        {% if publication.abstract %}
+            {{ publication.abstract | safe}}
+        {% endif %}
     </p>
     <h3  class="heading-small">Structure deposition and release</h3>
     <div>Deposited: {{structure.chronology.deposition_date}}</div>

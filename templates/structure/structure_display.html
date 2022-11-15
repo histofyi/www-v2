@@ -1,6 +1,6 @@
-{% set data_url = "https://www.histo.fyi/structures/files/view/aligned/" + structure.pdb_code + "_1.pdb"%}
-{% set data_url = "https://coordinates.histo.fyi/view/aligned/no_solvent/1a1m_1.pdb"%}
-{{data_url}}
+
+{% set data_url = "https://coordinates.histo.fyi/structures/view/class_i/with_solvent/" + structure.pdb_code + "_1_aligned.pdb"%}
+
         <div id="full_structure" style="height: 600px; width: 600px; position: relative;" class="viewer_3Dmoljs"                            
         data-href="{{data_url}}"
         data-backgroundcolor="0xffffff"

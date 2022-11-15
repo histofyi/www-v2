@@ -10,6 +10,10 @@ from flask import Flask
 
 from functions.files import load_json
 from functions.decorators import templated
+from functions.helpers import slugify
+
+
+
 
 import handlers
 
@@ -96,6 +100,41 @@ def chunked_sequence(sequence):
     return chunked_sequence
 
 
+@app.template_filter()
+def imgt_ipd_hla_parser(id):
+    stem = None
+    accession_id = None
+    print(id)
+    if id:
+        if 'uniprot' in id:
+            stem = None
+            accession_id = None
+        else:
+            if 'imgt' in id:
+                split_id = id.split(':')
+                stem = f'{split_id[0].lower()}'
+                accession_id = split_id[1]
+                resource = 'IPD-IMGT/HLA'
+            if 'mhc' in id:
+                split_id = id.split(':')
+                stem = f'{split_id[0].lower()}'
+                accession_id = split_id[1]
+                resource = 'IPD-MHC'
+            elif 'H2-' in id or 'mouse' in id.lower():
+                stem = None
+                accession_id = None
+    if stem and accession_id:
+        if stem == 'ipd-imgt':
+            url = f'https://www.ebi.ac.uk/ipd/imgt/hla/alleles/allele/?accession={accession_id}'
+        else:
+            url = f'https://www.ebi.ac.uk/ipd/mhc/allele/?accession={accession_id}'
+        return f'<strong>{resource}</strong><br />[<a href="{url}" target="_new">{id}</a>]'
+    else:
+        return ''
+
+@app.template_filter()
+def slugify_this(text):
+    return slugify(text)
 
 @app.route('/')
 @templated('index')
@@ -128,3 +167,10 @@ def structure_view_handler(pdb_code):
 @templated('shared/browse')
 def structure_browse_handler(context, set_slug):
     return handlers.structure_browse_handler(context, set_slug)
+
+
+@app.get('/search')
+@templated('search_page')
+def search():
+    return handlers.search_handler()
+    

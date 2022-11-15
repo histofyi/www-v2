@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}search | {{variables.query}}{% endblock %}
+{% set nav = 'structures' %}
+
+{% block main %}
+<style>
+    td {
+      vertical-align: top;
+    }
+  
+</style>
+
+<section class="">
+    <div class="grid-container">
+      <div class="column-full-width">
+        <div class="inner">
+            <h1 class="vertical-spacing-bottom-0-25">Fulltext search for "{{variables.query}}"</h1>
+            <div>{{set.pagination.total}} results</div>
+            <br />
+            <hr />
+            {% if not empty_search %}
+            <p>Page {{set.pagination.current_page}} of {{set.pagination.page_count}} | {{set.pagination.page_size}} items per page</p>
+            {% include "shared/partials/sets/pagination.html" %}
+            <hr />
+            <div class="vertical-spacing-top vertical-spacing-bottom">
+            {% set structures = search_results %}
+            {% include "shared/partials/sets/info.html" %}
+            </div>
+            {% else %}
+            <div class="vertical-spacing-top vertical-spacing-bottom">
+              Sorry, we can't find any results for that search.
+            </div>
+            {% endif %}
+            {% if not empty_search %}
+            <hr />
+            {% include "shared/partials/sets/pagination.html" %}
+            {% endif %}
+            <br />
+            <br />
+            <br />    
+        </div>
+    </div>
+</div>
+</section>
+{% endblock %}

@@ -1,5 +1,5 @@
 from models.sets import StructureSet
-from flask import current_app
+from functions.app import app_context
 
 
 def home_handler():
@@ -14,7 +14,7 @@ def home_handler():
         latest = None
         print (error)
     page_data = {
-        'collections':current_app.data['collections']['homepage'],
+        'collections':app_context.data['collections']['homepage'],
         'latest':latest
     }
     return page_data

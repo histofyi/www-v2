@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% set nav = 'structures' %}
+
+{% block main %}
+
+<section class="phases">
+  <div class="grid-container">
+      <div class="column-full-width">
+          <div class="inner">
+              <h1 class="heading-extra-large vertical-spacing-bottom">{{collection.slug}}</h1>
+          </div>
+      </div>
+  </div>
+
+  <div class="grid-container">
+      {% for item in collection.sets %}
+        {% set set = collection.sets[item] %}
+        {% include "shared/partials/sets/collection_card.html" %}
+      {% endfor %}
+  </div>
+
+</section>
+
+
+{% endblock %}

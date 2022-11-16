@@ -65,5 +65,9 @@ def structure_collection_handler(collection_slug):
     This function is the structure collection handler
 
     """
-    collection = StructureCollection(collection_slug).get()
-    return {'collection':collection}
+    if collection_slug in ['deposited','revised','released']:
+        order = 'chronology'
+    else:
+        order = 'count'
+    collection = StructureCollection(collection_slug).get(order=order)
+    return {'collection':collection,'order':order}

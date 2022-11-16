@@ -13,7 +13,21 @@
         {% if publication.bibjson.journal %}
             {% if publication.bibjson.journal.iso_abbreviation %}<i>{{publication.bibjson.journal.iso_abbreviation}}</i>{% endif %} {% if publication.bibjson.year %}({{publication.bibjson.year[0]}}),{% endif %}  {% if publication.bibjson.volume %}<strong>{{publication.bibjson.volume[0]}}</strong>,{% endif %} 
             {% if publication.bibjson.pages != '-' %}{{publication.bibjson.pages[0]}}{% endif %} {% if structure.doi %}[<a href="{{structure.resolved_doi_url}}" target="_blank">doi://{{structure.doi }}</a>]{% endif %} {# [View on PubMed] #}
-        {% endif %}
+            {% for identifier in publication.bibjson.identifier %}
+            {% if identifier.type == "doi" %}
+                {% if structure.publication.bibjson.url %}
+                    [<strong>doi</strong>:<a href="{{structure.publication.bibjson.url}}" target="_blank">{{identifier.id}}</a>]&nbsp;
+                {% else %}
+                    [<strong>doi</strong>:{{identifier.id}}]
+                {% endif %}
+            {% elif identifier.type == "pubmed" %}
+                [<strong>pubmed</strong>:<a href="https://pubmed.ncbi.nlm.nih.gov/{{identifier.id}}/" target="_blank">{{identifier.id}}</a>]&nbsp;
+            {% else %}
+                [<strong>{{identifier.type}}</strong>:{{identifier.id}}]
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+
     </div>
     <br />
     <p>

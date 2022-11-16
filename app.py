@@ -62,6 +62,10 @@ def load_data():
 
 
 @app.template_filter()
+def deslugify(text):
+    return text.replace('_',' ')
+
+@app.template_filter()
 def chunked_sequence(sequence):
     line_length = 60
     sequence_length = len(sequence)
@@ -136,6 +140,15 @@ def imgt_ipd_hla_parser(id):
 def slugify_this(text):
     return slugify(text)
 
+
+@app.template_filter()
+def html_stripped(text):
+    html_tags = ['strong']
+    for tag in html_tags:
+        text = text.replace(f'<{tag}>','').replace(f'</{tag}>','').replace(f'<{tag}/>','')
+    return text
+
+
 @app.route('/')
 @templated('index')
 def home_handler():
@@ -185,9 +198,42 @@ def search():
     return handlers.search_handler()
 
 
+@app.route('/about/')
+@app.route('/about')
+@templated('about_section')
+def about_home():
+    return handlers.about_handler('/about')
+    
+
+@app.route('/about/<string:about_page>')
+@templated('about_section')
+def about_page(about_page):
+    route = f'/about/{about_page}'
+    return handlers.about_handler(route)
 
 
+@app.route('/changelog')
+@templated('content')
+def content_route():
+    return handlers.about_handler('changelog')
 
+
+@app.get('/feedback')
+@templated('feedback')
+def feedback_form():
+    return handlers.feedback_form_page()
+
+
+@app.post('/feedback')
+@templated('feedback')
+def post_feedback():
+    return handlers.feedback_form_handler()
+
+
+@app.get('/feedback/thank-you')
+@templated('feedback')
+def feedback_thanks():
+    return {'message':'Thank you for your feedback. We\'ll be in touch soon'}
 
 
 

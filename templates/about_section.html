@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% if metadata %}
+{% block title %}{{metadata.section}} | {{metadata.title|html_stripped}}{% endblock %}
+{% endif %}
+
+{% if route == '/about' %}
+{% set route = '/about/' %}
+{% endif %}
+
+{% block main %}
+<style>
+    img.editorial {
+        border:1px solid #ddd;
+    }
+</style>
+<section class="">
+    <div class="grid-container">
+        <div class="column-two-thirds">
+            <div class="inner">
+                {% if metadata %}
+                    <h1 class="vertical-spacing-bottom vertical-spacing-top-0-5 heading-large">{{metadata.title|safe}}</h1>
+                {% endif %}
+                {{content|safe}}
+            </div>
+        </div>
+        <div class="column-one-third">
+            <hr/>
+            <ul>
+                {% for item in navigation %}
+                    <li class="vertical-spacing-top-0-25"><a href="{{item.url}}">
+                        {% if route == item.url %}
+                        <strong>{{item.title}}</strong>
+                        {% else %}
+                        {{item.title}}
+                        {% endif %}
+                    </a></li>
+                {% endfor %}
+            </ul>
+            <hr />
+        </div>
+    </div>
+</section>
+
+{% endblock %}

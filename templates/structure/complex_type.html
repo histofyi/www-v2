@@ -1,6 +1,6 @@
 <h3 class="vertical-spacing-top-0-5 heading-small">Complex type</h3>
 {% if structure.complex_type %}
-    <p>{{structure.complex_type}}</p>
+    <p>{{structure.complex_type|deslugify|capitalize}}</p>
 {% else %}
     <p>Problems in automatic complex type assignment. Known issue being fixed.</p>
 {% endif %}

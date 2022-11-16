@@ -46,10 +46,11 @@ class StructureLookup():
                 best_matches.append(pdb_code)
             elif score >= 50:
                 matches.append(pdb_code)
-        if len(matches) > 10:
-            matches = self.get_random(matches, 10)
+        if len(matches) > 5:
+            matches = [pdb_code for pdb_code in matches if pdb_code not in best_matches]
+            matches = self.get_random(matches, 5)
         if len(matches) == 0 and len(best_matches) == 0:
-            matches = self.get_random(self.pdb_codes, 10)
+            matches = self.get_random(self.pdb_codes, 5)
         return {'pdb_code':self.pdb_code, 'best_matches':StructureSetMembers.hydrate(best_matches), 'matches':StructureSetMembers.hydrate(matches)}
 
 

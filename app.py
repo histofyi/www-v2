@@ -236,6 +236,11 @@ def feedback_thanks():
     return {'message':'Thank you for your feedback. We\'ll be in touch soon'}
 
 
+@app.route('/posters/<string:year>/<string:conference>/')
+@app.route('/posters/<string:year>/<string:conference>')
+@templated('poster')
+def posters_route(year, conference):
+    return handlers.poster_handler(year, conference)
 
 
 

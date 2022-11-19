@@ -1,10 +1,11 @@
 <h3 class="vertical-spacing-top-0-5 heading-small">Complex type</h3>
 {% if structure.complex_type %}
-    <p>{{structure.complex_type|deslugify|capitalize}}</p>
+    <p><a href="/structures/browse/complex_types/{{structure.complex_type}}">{{structure.complex_type|deslugify|capitalize}}</a></p>
 {% else %}
     <p>Problems in automatic complex type assignment. Known issue being fixed.</p>
 {% endif %}
 {% for chain in structure.assigned_chains %}
+{% if chain not in ['note','forced_replace'] %}
 {% set thischain = structure.assigned_chains[chain] %}
     <div class="vertical-spacing-bottom-0-25">
         <div class="chain_block {{chain}}">
@@ -13,19 +14,13 @@
                 {% if chain == 'class_i_alpha' %}
                 <br />
                     {% if structure.allele %}
-                    <a href="/structures/sets/browse/allele/{{structure.allele.alpha.slug}}">{{structure.allele.alpha.name}}</a>
+                    <a href="/structures/browse/alleles/{{structure.allele.alpha.slug}}">{{structure.allele.alpha.name}}</a>
                     {% endif %}
                 {% elif chain == 'peptide' %}
                 <br />
-                <a href="/structures/sets/browse/peptide_sequence/{{structure.peptide_sequence|lower}}">{{structure.peptide_sequence}}</a>
+                <a href="/structures/browse/peptide_sequences/{{structure.peptide_sequence|lower}}">{{structure.peptide_sequence}}</a>
                 {% else %}
-                    {% if tcr_data %}
-                        {% for chain in ['alpha','beta'] %}
-                            {% if tcr_data[chain]['chains'][0] in thischain.chains %}
-                                <div>{{tcr_data[chain]['subgroup']}}</div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
+                    
                 {% endif%}
             </div>
             <div>
@@ -35,9 +30,10 @@
 
         </div>
     </div>
+{% endif %}
 {% endfor %}
-{% if tcr_data %}
+{% if structure.tcr %}
             <div>
                 <a href="http://opig.stats.ox.ac.uk/webapps/stcrdab/StrViewer?pdb=1ao7" target="_new">Information on this structure</a> on STCRdab.
             </div>
-            {% endif %}
+{% endif %}

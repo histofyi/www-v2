@@ -14,7 +14,6 @@ from functions.helpers import slugify
 
 
 
-
 import handlers
 
 
@@ -64,6 +63,7 @@ def load_data():
 @app.template_filter()
 def deslugify(text):
     return text.replace('_',' ')
+
 
 @app.template_filter()
 def chunked_sequence(sequence):
@@ -179,8 +179,6 @@ def structure_view_handler(pdb_code):
 @app.route('/structures/browse/<string:context>/<string:set_slug>')
 @templated('shared/browse')
 def structure_browse_handler(context, set_slug):
-    print (context)
-    print (set_slug)
     return handlers.structure_browse_handler(context, set_slug)
 
 

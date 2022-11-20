@@ -23,6 +23,8 @@ class StructureSet():
         if context in self.sets:
             if slug in self.sets[context]:
                 self.set = self.sets[context][slug]
+                self.set['slug'] = slug
+                self.set['context'] = context
             else:
                 self.set = None
                 raise Exception('Set not found error. No set named "{slug}" could be found within the contect "{context}"'.format(slug=slug,context=context))

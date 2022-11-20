@@ -4,9 +4,9 @@
 <h3 class="vertical-spacing-top-0-5 heading-small">Locus / Allele group</h3>
 <div class="vertical-spacing-bottom-0-5">
     {% if structure.classical %}
-    {% set allele_group = structure.allele.alpha.name.split('.')[0]%}
+    {% set allele_group = structure.allele.alpha.name.split(':')[0]%}
     {% if structure.locus %}
-        <a href="/structures/browse/loci/{{structure.locus|slugify_this}}">{{structure.locus}}</a>
+        <a href="/structures/browse/loci/{{structure.locus|slugify_this}}">{{structure.locus|upper}}</a>
     {% else %}
         Locus and allele not yet assigned
     {% endif %}

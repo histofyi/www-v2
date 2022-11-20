@@ -20,7 +20,11 @@
                 <br />
                 <a href="/structures/browse/peptide_sequences/{{structure.peptide_sequence|lower}}">{{structure.peptide_sequence}}</a>
                 {% else %}
-                    
+                {% if structure.tcr and chain in ['tcr_alpha','tcr_beta','tcr_delta','tcr_gamma'] %}
+                {% set tcr_chain = chain.replace('tcr_','') %}
+                <br />
+                {{structure.tcr[tcr_chain].subgroup}}
+            {% endif %}
                 {% endif%}
             </div>
             <div>

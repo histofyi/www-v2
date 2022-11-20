@@ -9,6 +9,7 @@
         <div class="column-full-width">
             <table width="100%">
             {% for chain in structure.assigned_chains %}
+            {% if chain not in ['note', 'force_override'] %}
             {% set thischain = structure.assigned_chains[chain]%}
             <tr>
                 <td class="chain_block {{chain}}">
@@ -30,7 +31,8 @@
                         <div>{{structure.allele.alpha.identifier|imgt_ipd_hla_parser|safe}}</div>
                     {% endif %}
                     {% if structure.tcr and chain in ['tcr_alpha','tcr_beta','tcr_delta','tcr_gamma'] %}
-                        {{structure.tcr}}
+                        {% set tcr_chain = chain.replace('tcr_','') %}
+                        {{structure.tcr[tcr_chain].subgroup}}
                     {% endif %}
                     {% if thischain.source_protein %}
                         <div><strong>Origin</strong><br />{{thischain.source_protein.source_organism.scientific_name}}</div>
@@ -46,6 +48,7 @@
                 </td>
             </tr>
             <tr><td></td><td></td></tr>
+            {% endif%}
             {% endfor %}
             </table>
             <br />

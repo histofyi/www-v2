@@ -21,17 +21,14 @@ def search_handler():
         current_page = 1
     else:
         current_page = int(variables['page_number'])
-    print (variables)
     hits = 0
     pages = 0
     itemset = {'pagination':{}}
     querytype = 'fulltext'
     if variables['query'] is not None:
-        print (variables['query'])
         query = variables['query']
     else:
         query = ''
-        print ('No query')
 
     if len(query) > 0:
         # first of all, if a user has overridden a search and wants a fulltext one, the fulltext variable will be true
@@ -41,8 +38,6 @@ def search_handler():
             querytype = query_info['querytype']
             if query_info['query'] is not None:
                 query = query_info['query']
-                print (query_info)
-                print (query)
             # if none of those can be found, or there are spaces in the query the parse_query function will set the querytype variable to fulltext
             if querytype == 'fulltext':
                 fulltext = True

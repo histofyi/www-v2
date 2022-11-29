@@ -14,12 +14,9 @@ def parse_query(query):
         elif 'mer' in query:
             length = query.replace('mer','') 
             length_number_query = '[0-9]{1,2}'
-            print (length)
             if re.search(length_number_query, length):
                 peptide_lengths = app_context.data['peptide_lengths']
-                print (peptide_lengths)
                 if str(length) in peptide_lengths:
-                    print ('MATCH')
                     querytype = 'peptide_lengths'
                     slug = peptide_lengths[str(length)]
                 else:

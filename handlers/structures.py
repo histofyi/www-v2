@@ -45,7 +45,7 @@ def structure_lookup_handler():
         return lookup 
 
 
-def structure_browse_handler(context, set_slug):
+def structure_browse_handler(context, set_slug, api=False):
     """
     This function is the structure browse handler
 
@@ -55,9 +55,13 @@ def structure_browse_handler(context, set_slug):
         page = 1
     else:
         page = int(variables['page_number'])
+    if api:
+        depth = 'core'
+    else:
+        depth = 'listings'
     page_size = 25
-    this_set = StructureSet(context, set_slug).hydrate(page=page, page_size=page_size)
-    return {'set':this_set}
+    itemset = StructureSet(context, set_slug).hydrate(page=page, page_size=25, depth=depth)
+    return {'set':itemset}
 
 
 def structure_collection_handler(collection_slug):

@@ -21,3 +21,9 @@ def structures_route(pdb_code):
 def search_route():
     # setting api=True returns full-fat listings (core records)
     return handlers.search_handler(api=True)
+
+
+@api_handlers.route('/sets/<string:context>/<string:slug>/')
+@api_handlers.route('/sets/<string:context>/<string:slug>')
+def sets_route(context, slug):
+    return handlers.structure_browse_handler(context, slug, api=True)

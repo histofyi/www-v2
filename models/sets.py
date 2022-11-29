@@ -67,7 +67,7 @@ class StructureSet():
         else:
             self.get()
             members = self.set['members']
-        hydrated_set['members'] = StructureSetMembers.hydrate(members)
+        hydrated_set['members'] = StructureSetMembers.hydrate(members, depth=depth)
         return hydrated_set
 
 

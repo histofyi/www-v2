@@ -22,7 +22,12 @@
               {% else %}
                 {{ search_types[querytype] }} search
               {% endif %}
-              for "{{query}}"
+              {% if "+" in query %}
+                {% set display_query = query.replace('+','').strip() %}
+              {% else %}
+                {% set display_query = query %}
+              {% endif %}
+              for "{{display_query}}"
             
             </h1>
             <div>{{set.pagination.total}} results</div>

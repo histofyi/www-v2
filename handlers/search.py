@@ -14,13 +14,17 @@ from functions.app import app_context
 
 
 
-def search_handler():    
+def search_handler(api=False):    
     empty_search = True
     variables = request_variables(None, params=['query','page_number','fulltext'])
     if not variables['page_number']:
         current_page = 1
     else:
         current_page = int(variables['page_number'])
+    if api:
+        depth='core'
+    else:
+        depth='listings'
     hits = 0
     pages = 0
     itemset = {'pagination':{}}
@@ -48,7 +52,7 @@ def search_handler():
 
         if not fulltext:
             try:
-                itemset = StructureSet(query_info['querytype'], query_info['slug']).hydrate(page=current_page, page_size=25)
+                itemset = StructureSet(query_info['querytype'], query_info['slug']).hydrate(page=current_page, page_size=25, depth=depth)
                 processed_search_results = itemset['members']
                 empty_search = False
                 fulltext = False
@@ -80,7 +84,7 @@ def search_handler():
                         'page_size':25,
                         'pages':[page for page in range(1,search_results['nbPages'] + 1)]
                     }
-                    processed_search_results = StructureSetMembers.hydrate([result['pdb_code'] for result in search_results['hits']])
+                    processed_search_results = StructureSetMembers.hydrate([result['pdb_code'] for result in search_results['hits']], depth=depth)
                     empty_search = False
     else:
         processed_search_results = []

@@ -19,4 +19,5 @@ def structures_route(pdb_code):
 
 @api_handlers.route('/search')
 def search_route():
-    return handlers.search_handler()
+    # setting api=True returns full-fat listings (core records)
+    return handlers.search_handler(api=True)

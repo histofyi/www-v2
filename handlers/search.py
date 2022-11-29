@@ -78,7 +78,7 @@ def search_handler():
                         'current_page':current_page,
                         'page_count':search_results['nbPages'],
                         'page_size':25,
-                        'pages':range(1,search_results['nbPages'] + 1)
+                        'pages':[page for page in range(1,search_results['nbPages'] + 1)]
                     }
                     processed_search_results = StructureSetMembers.hydrate([result['pdb_code'] for result in search_results['hits']])
                     empty_search = False

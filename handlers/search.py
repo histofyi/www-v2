@@ -53,7 +53,7 @@ def search_handler(api=False):
         if not fulltext:
             try:
                 itemset = StructureSet(query_info['querytype'], query_info['slug']).hydrate(page=current_page, page_size=25, depth=depth)
-                processed_search_results = itemset['members']
+                processed_search_results = itemset['hydrated_members']
                 empty_search = False
                 fulltext = False
             except:

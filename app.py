@@ -5,14 +5,15 @@ import toml
 import datetime
 import itertools
 
-from flask import Flask, Response, redirect
+from flask import Flask, Response, redirect, jsonify
 
 
 from functions.files import load_json
-from functions.decorators import templated
+from functions.decorators import templated, webview
 from functions.helpers import slugify
 
 
+from api import api_handlers
 
 import handlers
 
@@ -33,6 +34,8 @@ def create_app():
     """
     app = Flask(__name__)
 
+    app.register_blueprint(api_handlers, url_prefix='/v1')
+    
     app.config.from_file('config.toml', toml.load)
     app.secret_key = app.config['SECRET_KEY']
 
@@ -58,6 +61,140 @@ def load_data():
     app.data = {}
     for dataset in datasets:
         app.data[dataset] = load_json(dataset)
+
+
+@app.route('/')
+@webview
+@templated('index')
+def home_handler():
+    return handlers.home_handler()
+
+
+@app.route('/structures/lookup/')
+@app.route('/structures/lookup')
+@webview
+@templated('lookup')
+def structure_lookup_handler():
+    return handlers.structure_lookup_handler()
+
+
+@app.route('/api/v1/structures/<string:pdb_code>/')
+@app.route('/api/v1/structures/<string:pdb_code>')
+def structure_api_handler(pdb_code):
+    return handlers.structure_view_handler(pdb_code)
+
+
+@app.route('/structures/view/<string:pdb_code>/')
+@app.route('/structures/view/<string:pdb_code>')
+@webview
+@templated('structure/view')
+def structure_view_handler(pdb_code):
+    return handlers.structure_view_handler(pdb_code)
+
+
+@app.route('/structures/browse/<string:context>/<string:set_slug>/')
+@app.route('/structures/browse/<string:context>/<string:set_slug>')
+@webview
+@templated('shared/browse')
+def structure_browse_handler(context, set_slug):
+    return handlers.structure_browse_handler(context, set_slug)
+
+
+@app.route('/structures/collections/<string:collection_slug>/')
+@app.route('/structures/collections/<string:collection_slug>')
+@webview
+@templated('collection')
+def structure_collection_handler(collection_slug):
+    return handlers.structure_collection_handler(collection_slug)
+
+
+@app.get('/search')
+@webview
+@templated('search_page')
+def search():
+    return handlers.search_handler()
+
+
+@app.route('/about/')
+@app.route('/about')
+@webview
+@templated('about_section')
+def about_home():
+    return handlers.about_handler('/about')
+    
+
+@app.route('/about/<string:about_page>')
+@templated('about_section')
+@webview
+def about_page(about_page):
+    route = f'/about/{about_page}'
+    return handlers.about_handler(route)
+
+
+@app.route('/changelog')
+@webview
+@templated('content')
+def content_route():
+    return handlers.about_handler('changelog')
+
+
+@app.get('/feedback')
+@webview
+@templated('feedback')
+def feedback_form():
+    return handlers.feedback_form_page()
+
+
+@app.post('/feedback')
+@webview
+@templated('feedback')
+def post_feedback():
+    return handlers.feedback_form_handler()
+
+
+@app.get('/feedback/thank-you')
+@webview
+@templated('feedback')
+def feedback_thanks():
+    return {'message':'Thank you for your feedback. We\'ll be in touch soon'}
+
+
+@app.route('/posters/<string:year>/<string:conference>/')
+@app.route('/posters/<string:year>/<string:conference>')
+@webview
+@templated('poster')
+def posters_route(year, conference):
+    return handlers.poster_handler(year, conference)
+
+
+
+@app.route('/robots.txt')
+def robots_txt():
+    raw_response = '''
+    User-agent: *
+    Allow: /
+    '''
+    response_text = '\n'.join([line.strip() for line in raw_response.splitlines() if len(line) > 0])
+    r = Response(response=response_text, status=200, mimetype="text/plain")
+    r.headers["Content-Type"] = "text/plain; charset=utf-8"
+    return r
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return redirect('/static/histo-32-color.png')
+
+@app.errorhandler(404)
+def resource_not_found(e):
+    return jsonify(error=str(e)), 404
+
+
+@app.route('/<path:path>')
+@webview
+@templated('404')
+def error_404(path):
+    return handlers.handle_404(path)
+    
 
 
 @app.template_filter()
@@ -148,118 +285,3 @@ def html_stripped(text):
         text = text.replace(f'<{tag}>','').replace(f'</{tag}>','').replace(f'<{tag}/>','')
     return text
 
-
-@app.route('/')
-@templated('index')
-def home_handler():
-    return handlers.home_handler()
-
-
-@app.route('/structures/lookup/')
-@app.route('/structures/lookup')
-@templated('lookup')
-def structure_lookup_handler():
-    return handlers.structure_lookup_handler()
-
-
-@app.route('/api/v1/structures/<string:pdb_code>/')
-@app.route('/api/v1/structures/<string:pdb_code>')
-def structure_api_handler(pdb_code):
-    return handlers.structure_view_handler(pdb_code)
-
-
-@app.route('/structures/view/<string:pdb_code>/')
-@app.route('/structures/view/<string:pdb_code>')
-@templated('structure/view')
-def structure_view_handler(pdb_code):
-    return handlers.structure_view_handler(pdb_code)
-
-
-@app.route('/structures/browse/<string:context>/<string:set_slug>/')
-@app.route('/structures/browse/<string:context>/<string:set_slug>')
-@templated('shared/browse')
-def structure_browse_handler(context, set_slug):
-    return handlers.structure_browse_handler(context, set_slug)
-
-
-@app.route('/structures/collections/<string:collection_slug>/')
-@app.route('/structures/collections/<string:collection_slug>')
-@templated('collection')
-def structure_collection_handler(collection_slug):
-    return handlers.structure_collection_handler(collection_slug)
-
-
-@app.get('/search')
-@templated('search_page')
-def search():
-    return handlers.search_handler()
-
-
-@app.route('/about/')
-@app.route('/about')
-@templated('about_section')
-def about_home():
-    return handlers.about_handler('/about')
-    
-
-@app.route('/about/<string:about_page>')
-@templated('about_section')
-def about_page(about_page):
-    route = f'/about/{about_page}'
-    return handlers.about_handler(route)
-
-
-@app.route('/changelog')
-@templated('content')
-def content_route():
-    return handlers.about_handler('changelog')
-
-
-@app.get('/feedback')
-@templated('feedback')
-def feedback_form():
-    return handlers.feedback_form_page()
-
-
-@app.post('/feedback')
-@templated('feedback')
-def post_feedback():
-    return handlers.feedback_form_handler()
-
-
-@app.get('/feedback/thank-you')
-@templated('feedback')
-def feedback_thanks():
-    return {'message':'Thank you for your feedback. We\'ll be in touch soon'}
-
-
-@app.route('/posters/<string:year>/<string:conference>/')
-@app.route('/posters/<string:year>/<string:conference>')
-@templated('poster')
-def posters_route(year, conference):
-    return handlers.poster_handler(year, conference)
-
-
-
-@app.route('/robots.txt')
-def robots_txt():
-    raw_response = '''
-    User-agent: *
-    Allow: /
-    '''
-    response_text = '\n'.join([line.strip() for line in raw_response.splitlines() if len(line) > 0])
-    r = Response(response=response_text, status=200, mimetype="text/plain")
-    r.headers["Content-Type"] = "text/plain; charset=utf-8"
-    return r
-
-
-@app.route('/favicon.ico')
-def favicon():
-    return redirect('/static/histo-32-color.png')
-
-
-@app.route('/<path:path>')
-@templated('404')
-def error_404(path):
-    return handlers.handle_404(path)
-    

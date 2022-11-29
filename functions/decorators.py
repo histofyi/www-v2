@@ -1,4 +1,4 @@
-from flask import request, current_app, redirect
+from flask import request, current_app, redirect, abort
 
 from functools import wraps
 
@@ -11,6 +11,16 @@ search_types = {
     'loci': 'Locus',
     'peptide_lengths': 'Peptide length'
 }
+
+
+            
+def webview(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if request.host in ['api.histo.fyi','127.0.0.1:8082']:
+            return abort(404)
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 def templated(template:str):

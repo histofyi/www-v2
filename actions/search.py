@@ -30,8 +30,14 @@ def parse_query(query):
                     querytype = 'alleles'
                     slug = slugify(query)
                 else:
-                    querytype = 'allele_groups'
-                    slug = slugify(query)
+                    numbers = query.split('*')[1]
+                    if len(numbers) < 4:
+                        querytype = 'allele_groups'
+                        slug = slugify(query)
+                    else:
+                        querytype = 'alleles'
+                        numbers = f'{numbers[0:2]}:{numbers[2:]}'
+                        slug = slugify(f'{query.split("*")[0]}*{numbers}')
                 query = query.upper()
             elif 'h2-' in query: # special case for mouse
                 if len(query) > 4:

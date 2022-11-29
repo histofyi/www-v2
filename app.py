@@ -54,7 +54,7 @@ def load_data():
 
     By loading them in here, we can reduce S3 calls and speed the app up significantly.
     """
-    datasets = ['pdb_codes','collections','index','ordering','sets','core','listings','chains','collection_colours']
+    datasets = ['pdb_codes','collections','index','ordering','sets','core','listings','chains','collection_colours','peptide_lengths']
     app.data = {}
     for dataset in datasets:
         app.data[dataset] = load_json(dataset)
@@ -187,7 +187,6 @@ def structure_browse_handler(context, set_slug):
 @templated('collection')
 def structure_collection_handler(collection_slug):
     return handlers.structure_collection_handler(collection_slug)
-
 
 
 @app.get('/search')

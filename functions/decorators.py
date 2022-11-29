@@ -4,7 +4,13 @@ from functools import wraps
 
 from .templating import render
 
-
+search_types = {
+    'alleles': 'Allele',
+    'allele_groups': 'Allele group',
+    'peptide_sequences': 'Peptide sequence',
+    'loci': 'Locus',
+    'peptide_lengths': 'Peptide length'
+}
 
 
 def templated(template:str):
@@ -29,6 +35,7 @@ def templated(template:str):
             ctx['static_route'] = current_app.config['STATIC_ROUTE']
             ctx['collection_colours'] = current_app.data['collection_colours']
             ctx['chain_types'] = current_app.data['chains']
+            ctx['search_types'] = search_types
             if '/' in template_name:
                 section = template_name.split('/')[0]
                 ctx['nav'] = section

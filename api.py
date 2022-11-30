@@ -27,3 +27,9 @@ def search_route():
 @api_handlers.route('/sets/<string:context>/<string:slug>')
 def sets_route(context, slug):
     return handlers.structure_browse_handler(context, slug, api=True)
+
+
+@api_handlers.route('/collections/<string:slug>/')
+@api_handlers.route('/collections/<string:slug>')
+def collections_route(slug):
+    return handlers.structure_collection_handler(slug)

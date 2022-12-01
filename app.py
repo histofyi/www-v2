@@ -57,10 +57,11 @@ def load_data():
 
     By loading them in here, we can reduce S3 calls and speed the app up significantly.
     """
-    datasets = ['pdb_codes','collections','index','ordering','sets','core','listings','chains','collection_colours','peptide_lengths']
+    datasets = ['collections','index','ordering','sets','core','listings','chains','collection_colours','peptide_lengths']
     app.data = {}
     for dataset in datasets:
         app.data[dataset] = load_json(dataset)
+    app.data['pdb_codes'] = app.data['index']['deposition_date_asc']
 
 
 @app.route('/')

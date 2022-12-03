@@ -12,7 +12,7 @@
         <div class="column-one-half">
             <div class="inner">
                 <strong>Interactive view</strong> 
-                {% set peptide_url = "https://coordinates.histo.fyi/view/peptide/no_solvent/1a1m_1.cif" %}
+                {% set peptide_url = "https://coordinates.histo.fyi/structures/view/class_i/without_solvent/" + structure.pdb_code + "_1_peptide.cif" %}
                 <div id="peptide_structure" style="height: 400px; width: 600px; position: relative;" class="viewer_3Dmoljs"                            
                 data-href="{{peptide_url}}"
                 data-backgroundcolor="0xffffff"
@@ -31,7 +31,7 @@
             <div class="inner">
                 <strong>Surface top view</strong> (static - coloured by atom property)
                 <br />
-                <img src="{{static_route}}/images/structures/cleft/yrb/{{structure.pdb_code}}_1_yrb_medium.png" />
+                <img src="https://images.histo.fyi/cleft/yrb/{{structure.pdb_code}}_1_yrb_medium.png" />
             </div>
         </div>
         <div class="column-one-half">
